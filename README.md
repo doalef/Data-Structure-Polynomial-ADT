@@ -1,3 +1,3 @@
 # Data-Structure-Polynomial-ADT
 
-Data Structer class project : Polynomial Abstract Data Type
+Data Structure class project : Polynomial Abstract Data Type
