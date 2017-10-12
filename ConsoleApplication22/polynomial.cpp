@@ -33,23 +33,57 @@ float polynomial::Eval(float f) {
 	return res;
 }
 
-//float * polynomial::sum(polynomial p) {
-//	float *res;
-//	if (p.degree >= degree) {
-//		res = new float[p.degree];
-//		for (int i = 0; i <= degree; i++) {
-//			res[i] = (A[i] + p.A[i]);
-//		}
-//	}
-//	else
-//	{
-//		res = new float[degree];
-//		for (int i = 0; i <= p.degree; i++) {
-//			res[i] = (A[i] + p.A[i]);
-//		}
-//	}
-//	return res;
-//}
+polynomial polynomial::sum(polynomial p) {
+	if (p.num >= num) {
+		polynomial res(p.degree, p.num + num);
+
+		//flag , incase there are unique exps
+		bool exists = false;
+		//first loop for the bigger one
+		for (int i = num - 1; i >= 0; i--) {
+			for (int j = p.num - 1; j >= 0; j--) {
+				//subtracts if exps match
+				if (term_[i].exp == p.term_[j].exp) {
+					res.term_[i].coef = (term_[i].coef - p.term_[j].coef);
+					res.term_[i].exp = p.term_[i].exp;
+					exists = true;
+				}
+			}
+			//adds it incase it doesn't exist in the second object
+			if (!exists) {
+				res.term_[i].coef = term_[i].coef;
+				res.term_[i].exp = p.term_[i].exp;
+				exists = false;
+			}
+		}
+		return res;
+	}
+	else
+	{
+		polynomial res(degree, p.num + num);
+
+		//flag , incase there are unique exps
+		bool exists = false;
+		//first loop for the bigger one
+		for (int i = p.num - 1; i >= 0; i--) {
+			for (int j = num - 1; j >= 0; j--) {
+				//subtracts if exps match
+				if (term_[i].exp == p.term_[j].exp) {
+					res.term_[i].coef = (term_[i].coef - p.term_[j].coef);
+					res.term_[i].exp = p.term_[i].exp;
+					exists = true;
+				}
+			}
+			//adds it incase it doesn't exist in the second object
+			if (!exists) {
+				res.term_[i].coef = term_[i].coef;
+				res.term_[i].exp = p.term_[i].exp;
+				exists = false;
+			}
+		}
+		return res;
+	}
+}
 
 void polynomial::fill(int index, int exp, float value) {
 	term_[index].coef = value;
@@ -102,49 +136,84 @@ void polynomial::print() {
 	}
 }
 
-//float * polynomial::Subtract(polynomial p) {
-//	float *res;
-//	if (p.degree >= degree) {
-//		res = new float[p.degree];
-//		for (int i = 0; i <= degree; i++) {
-//			res[i] = (A[i] - p.A[i]);
-//		}
-//	}
-//	else
-//	{
-//		res = new float[degree];
-//		for (int i = 0; i <= p.degree; i++) {
-//			res[i] = (A[i] - p.A[i]);
-//		}
-//	}
-//	return res;
-//}
+polynomial  polynomial::Subtract(polynomial p) {
+	if (p.num >= num) {
+		polynomial res(p.degree, p.num + num);
 
+		//flag , incase there are unique exps
+		bool exists = false;
+		//first loop for the bigger one
+		for (int i = num - 1; i >= 0; i--) {
+			for (int j = p.num - 1; j >= 0; j--) {
+				//subtracts if exps match
+				if (term_[i].exp == p.term_[j].exp) {
+					res.term_[i].coef = (term_[i].coef - p.term_[j].coef);
+					res.term_[i].exp = p.term_[i].exp;
+					exists = true;
+				}
+			}
+			//adds it incase it doesn't exist in the second object
+			if (!exists) {
+				res.term_[i].coef = term_[i].coef;
+				res.term_[i].exp = p.term_[i].exp;
+				exists = false;
+			}
+		}
+		return res;
+	}
+	else
+	{
+		polynomial res(degree, p.num + num);
 
-//float * polynomial::multiply(polynomial p) {
-//	float *result;
-//	result = new float[degree + p.degree];
-//	for (int i = 0; i <= (degree + p.degree + 2); i++) {
-//		result[i] = 0;
-//	}
-//	for (int i = degree; i >= 0; i--) {
-//		for (int j = p.degree; j >= 0; j--) {
-//			result[i + j] += (A[i] * p.A[j]);
-//			cout << result[i + j] << "\n";
-//		}
-//	}
-//
-//	return result;
-//}
+		//flag , incase there are unique exps
+		bool exists = false;
+		//first loop for the bigger one
+		for (int i = p.num - 1; i >= 0; i--) {
+			for (int j = num - 1; j >= 0; j--) {
+				//subtracts if exps match
+				if (term_[i].exp == p.term_[j].exp) {
+					res.term_[i].coef = (term_[i].coef - p.term_[j].coef);
+					res.term_[i].exp = p.term_[i].exp;
+					exists = true;
+				}
+			}
+			//adds it incase it doesn't exist in the second object
+			if (!exists) {
+				res.term_[i].coef = term_[i].coef;
+				res.term_[i].exp = p.term_[i].exp;
+				exists = false;
+			}
+		}
+		return res;
+	}
+}
+
+polynomial polynomial::multiply(polynomial p) {
+	polynomial res(p.degree + degree, num + p.num);
+	for (int i = num - 1; i >= 0; i++) {
+		for (int j = p.num; j >= 0; j++) {
+			if (term_[i].exp == p.term_[i].exp && term_[i].coef == p.term_[i].coef) {
+				res.term_[i + j].coef = term_[i].coef * term_[i].coef;
+				res.term_[i + j].exp = term_[i].exp * 2;
+				break;
+			}
+			else {
+				res.term_[i + j].coef = term_[i].coef * p.term_[i].coef;
+				res.term_[i + j].exp = term_[i].exp + p.term_[i].exp;
+			}
+		}
+	}
+	return res;
+}
 
 void polynomial::sort() {
 	int exp;
 	float coef;
-	for (int i = num-1; i > 0 ; i--) {
-		if (term_[i].coef > term_[i-1].coef) {
+	for (int i = num - 1; i > 0; i--) {
+		if (term_[i].coef > term_[i - 1].coef) {
 			coef = term_[i].coef;
 			exp = term_[i].exp;
-			term_[i].coef = term_[i-1].coef;
+			term_[i].coef = term_[i - 1].coef;
 			term_[i].exp = term_[i - 1].exp;
 			term_[i - 1].coef = coef;
 			term_[i - 1].exp = exp;
